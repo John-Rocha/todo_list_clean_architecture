@@ -18,7 +18,7 @@ class AppModule extends Module {
       '/',
       child: (context) => const SplashPage(),
     );
-    r.module('/login', module: AuthModule());
+    r.module('/auth', module: AuthModule());
     r.module('/home', module: HomeModule());
   }
 }

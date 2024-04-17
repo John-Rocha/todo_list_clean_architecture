@@ -1,50 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:todo_list_clean_architecture/src/shared/widgets/custom_button.dart';
 import 'package:todo_list_clean_architecture/src/shared/widgets/custom_text_form_field.dart';
 import 'package:validatorless/validatorless.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignUpPageState extends State<SignUpPage> {
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
   bool _isObscure = true;
 
   final _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Form(
-            key: _formKey,
-            child: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: Center(
+            child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox.square(
-                    dimension: 120,
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      fit: BoxFit.cover,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                   Text(
-                    'Missão: Fazer Tudo',
+                    'Cadastro',
                     style: TextStyle(
                       fontSize: MediaQuery.of(context).size.width * 0.08,
                       fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    controller: _nameController,
+                    validator: Validatorless.multiple(
+                      [
+                        Validatorless.required('Campo obrigatório'),
+                        Validatorless.min(3, 'Nome muito curto'),
+                      ],
+                    ),
+                    label: 'Nome',
+                    keyboardType: TextInputType.text,
+                    borderRadius: 16,
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
@@ -69,36 +73,66 @@ class _SignInPageState extends State<SignInPage> {
                       ],
                     ),
                     label: 'Senha',
-                    borderRadius: 16,
+                    keyboardType: TextInputType.visiblePassword,
                     obscureText: _isObscure,
                     suffixIcon: IconButton(
-                      onPressed: () => setState(() => _isObscure = !_isObscure),
                       icon: Icon(
                         _isObscure ? Icons.visibility : Icons.visibility_off,
                       ),
+                      onPressed: () {
+                        setState(() {
+                          _isObscure = !_isObscure;
+                        });
+                      },
                     ),
+                    borderRadius: 16,
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    validator: Validatorless.multiple(
+                      [
+                        Validatorless.required('Campo obrigatório'),
+                        Validatorless.min(6, 'Senha muito curta'),
+                        Validatorless.compare(
+                          _passwordController,
+                          'Senhas não iguais',
+                        ),
+                      ],
+                    ),
+                    label: 'Confirme a senha',
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: _isObscure,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isObscure ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isObscure = !_isObscure;
+                        });
+                      },
+                    ),
+                    borderRadius: 16,
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     height: 48,
-                    child: CustomButton(
-                      type: CustomButtonType.elevated,
+                    child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           Modular.to.pushReplacementNamed('/home');
                         }
                       },
-                      child: const Text('Entrar'),
+                      child: const Text('Cadastrar'),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  CustomButton(
-                    type: CustomButtonType.text,
+                  TextButton(
                     onPressed: () {
-                      Modular.to.pushNamed('/auth/signup');
+                      Modular.to.pop();
                     },
-                    child: const Text('Criar conta'),
+                    child: const Text('Já tenho conta'),
                   ),
                 ],
               ),

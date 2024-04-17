@@ -16,11 +16,19 @@ class _SplashPageState extends State<SplashPage> {
     FirebaseAuth.instance.authStateChanges().listen((user) {
       Future.delayed(const Duration(seconds: 3), () {
         if (user == null) {
-          Modular.to.navigate('/login/');
+          Modular.to.pushReplacementNamed('/auth/');
         } else {
-          Modular.to.navigate('/home/');
+          Modular.to.pushReplacementNamed('/home/');
         }
       });
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    Future.delayed(const Duration(seconds: 3), () {
+      Modular.to.pushReplacementNamed('/auth/');
     });
   }
 
@@ -33,7 +41,7 @@ class _SplashPageState extends State<SplashPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Theme.of(context).colorScheme.primary,
+              Theme.of(context).colorScheme.onPrimary,
               Theme.of(context).colorScheme.secondary,
             ],
           ),
