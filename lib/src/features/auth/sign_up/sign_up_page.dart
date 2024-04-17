@@ -120,9 +120,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: 48,
                     child: ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          Modular.to.pushReplacementNamed('/home');
+                        if (!_formKey.currentState!.validate()) {
+                          return;
                         }
+                        Modular.to.pushReplacementNamed('/home');
                       },
                       child: const Text('Cadastrar'),
                     ),
