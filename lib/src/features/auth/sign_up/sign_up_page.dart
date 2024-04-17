@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:todo_list_clean_architecture/src/core/ui/base_state/base_state.dart';
+import 'package:todo_list_clean_architecture/src/features/auth/cubit/auth_cubit.dart';
 import 'package:todo_list_clean_architecture/src/shared/widgets/custom_text_form_field.dart';
 import 'package:validatorless/validatorless.dart';
 
@@ -10,12 +12,13 @@ class SignUpPage extends StatefulWidget {
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignUpPageState extends BaseState<SignUpPage, AuthCubit> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  bool _isObscure = true;
+  bool _isObscurePassword = true;
+  bool _isObscureConfirmPassword = true;
 
   final _formKey = GlobalKey<FormState>();
   @override
@@ -74,14 +77,16 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     label: 'Senha',
                     keyboardType: TextInputType.visiblePassword,
-                    obscureText: _isObscure,
+                    obscureText: _isObscurePassword,
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _isObscure ? Icons.visibility : Icons.visibility_off,
+                        _isObscurePassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
                       onPressed: () {
                         setState(() {
-                          _isObscure = !_isObscure;
+                          _isObscurePassword = !_isObscurePassword;
                         });
                       },
                     ),
@@ -95,20 +100,23 @@ class _SignUpPageState extends State<SignUpPage> {
                         Validatorless.min(6, 'Senha muito curta'),
                         Validatorless.compare(
                           _passwordController,
-                          'Senhas não iguais',
+                          'Senhas não são iguais',
                         ),
                       ],
                     ),
                     label: 'Confirme a senha',
                     keyboardType: TextInputType.visiblePassword,
-                    obscureText: _isObscure,
+                    obscureText: _isObscureConfirmPassword,
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _isObscure ? Icons.visibility : Icons.visibility_off,
+                        _isObscureConfirmPassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
                       onPressed: () {
                         setState(() {
-                          _isObscure = !_isObscure;
+                          _isObscureConfirmPassword =
+                              !_isObscureConfirmPassword;
                         });
                       },
                     ),
@@ -123,7 +131,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         if (!_formKey.currentState!.validate()) {
                           return;
                         }
-                        Modular.to.pushReplacementNamed('/home');
                       },
                       child: const Text('Cadastrar'),
                     ),

@@ -41,7 +41,7 @@ class _SplashPageState extends State<SplashPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Theme.of(context).colorScheme.onPrimary,
+              Theme.of(context).colorScheme.primary,
               Theme.of(context).colorScheme.secondary,
             ],
           ),
