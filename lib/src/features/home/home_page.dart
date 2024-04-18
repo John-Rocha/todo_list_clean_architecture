@@ -60,7 +60,7 @@ class _HomePageState extends BaseState<HomePage, HomeCubit> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '${authService.currentUser?.email}',
+                    '${authService.currentUser?.displayName}',
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
