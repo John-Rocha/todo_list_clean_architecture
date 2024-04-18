@@ -15,9 +15,9 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends BaseState<SignUpPage, AuthCubit> {
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _nameController = TextEditingController(text: 'Teste');
+  final _emailController = TextEditingController(text: 'john@email.com');
+  final _passwordController = TextEditingController(text: '123456');
 
   bool _isObscurePassword = true;
   bool _isObscureConfirmPassword = true;
