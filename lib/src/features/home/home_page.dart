@@ -6,6 +6,7 @@ import 'package:todo_list_clean_architecture/src/features/auth/cubit/auth_cubit.
 import 'package:todo_list_clean_architecture/src/features/home/cubit/home_cubit.dart';
 import 'package:todo_list_clean_architecture/src/services/auth/auth_service.dart';
 import 'package:todo_list_clean_architecture/src/shared/widgets/custom_button.dart';
+import 'package:todo_list_clean_architecture/src/shared/widgets/custom_drawer.dart';
 import 'package:validatorless/validatorless.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,26 +33,18 @@ class _HomePageState extends BaseState<HomePage, HomeCubit> {
         if (state is HomeLoadingState) {
           showLoader();
         }
+
+        if (state is HomeLoadedState) {
+          hideLoader();
+        }
       },
       builder: (context, state) {
         return Scaffold(
+          drawer: CustomDrawer(
+            authService: authService,
+            authController: authController,
+          ),
           appBar: AppBar(
-            title: Row(
-              children: [
-                const Text('Olá'),
-                Visibility(
-                  visible: authService.currentUser?.displayName != null &&
-                      state is! HomeLoadingState,
-                  replacement: Container(
-                    width: 20,
-                    height: 20,
-                    padding: const EdgeInsets.only(left: 4),
-                    child: const CircularProgressIndicator.adaptive(),
-                  ),
-                  child: Text(' ${authService.currentUser?.displayName ?? ''}'),
-                )
-              ],
-            ),
             actions: [
               IconButton(
                 icon: const Icon(Icons.edit),
@@ -59,14 +52,20 @@ class _HomePageState extends BaseState<HomePage, HomeCubit> {
                   showUpdateNameDialog(context);
                 },
               ),
-              IconButton(
-                icon: const Icon(Icons.logout),
-                onPressed: authController.signOut,
-              ),
             ],
           ),
           body: Center(
-            child: Text('${authService.currentUser?.uid}'),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    authService.currentUser!.displayName!,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },
@@ -85,6 +84,7 @@ class _HomePageState extends BaseState<HomePage, HomeCubit> {
           content: Form(
             key: formKey,
             child: TextFormField(
+              initialValue: authService.currentUser?.displayName ?? '',
               onChanged: (value) {
                 newDisplayName = value;
               },
