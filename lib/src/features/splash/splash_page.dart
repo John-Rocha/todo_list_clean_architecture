@@ -13,22 +13,14 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((user) {
-      Future.delayed(const Duration(seconds: 3), () {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FirebaseAuth.instance.authStateChanges().listen((user) {
         if (user == null) {
-          Modular.to.pushReplacementNamed('/auth/');
+          Modular.to.navigate('/auth/');
         } else {
-          Modular.to.pushReplacementNamed('/home/');
+          Modular.to.navigate('/home/');
         }
       });
-    });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Future.delayed(const Duration(seconds: 3), () {
-      Modular.to.pushReplacementNamed('/auth/');
     });
   }
 

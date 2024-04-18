@@ -13,6 +13,8 @@ class AuthException implements Exception {
 
 void handleFirebaseAuthError(FirebaseAuthException e) {
   switch (e.code) {
+    case 'invalid-credential':
+      throw AuthException('E-mail ou senha inválidos');
     case 'email-already-in-use':
       throw AuthException('E-mail já está em uso');
     case 'weak-password':

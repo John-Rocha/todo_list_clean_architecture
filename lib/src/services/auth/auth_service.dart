@@ -1,12 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 abstract class AuthService {
-  Future<void> signInWithEmailAndPassword({
+  Future<User?> signIn({
     required String email,
     required String password,
   });
-  Future<void> signUpWithEmailAndPassword({
+  Future<User?> signUp({
     required String email,
     required String password,
     required String name,
   });
   Future<void> signOut();
+
+  User? get currentUser;
 }

@@ -12,6 +12,12 @@ class AppModule extends Module {
       ];
 
   @override
+  List<Module> get imports => [
+        AuthModule(),
+        HomeModule(),
+      ];
+
+  @override
   List<ModularRoute> get routes => [
         ChildRoute(
           '/',

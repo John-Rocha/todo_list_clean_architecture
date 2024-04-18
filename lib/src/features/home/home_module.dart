@@ -1,9 +1,16 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:todo_list_clean_architecture/src/features/auth/auth_module.dart';
+import 'package:todo_list_clean_architecture/src/features/home/cubit/home_cubit.dart';
 import 'package:todo_list_clean_architecture/src/features/home/home_page.dart';
 
 class HomeModule extends Module {
   @override
-  List<Bind> get binds => [];
+  List<Bind> get binds => [
+        Bind.lazySingleton((i) => HomeCubit(authService: i.get())),
+      ];
+
+  @override
+  List<Module> get imports => [AuthModule()];
 
   @override
   List<ModularRoute> get routes => [

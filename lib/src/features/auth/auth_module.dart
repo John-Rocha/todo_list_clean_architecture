@@ -9,7 +9,7 @@ class AuthModule extends Module {
   @override
   List<Bind> get binds => [
         Bind.lazySingleton<AuthService>((i) => AuthServiceImpl()),
-        Bind.singleton((i) => AuthCubit(authService: i.get())),
+        Bind.singleton((i) => AuthCubit(authService: i.get()), export: true),
       ];
 
   @override
