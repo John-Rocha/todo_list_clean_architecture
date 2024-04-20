@@ -12,6 +12,12 @@ final class HomeLoadedState extends HomeState {
   HomeLoadedState({required this.user});
 }
 
+final class HomePageChangedState extends HomeState {
+  final int index;
+
+  HomePageChangedState({required this.index});
+}
+
 final class HomeErrorState extends HomeState {
   final String message;
 

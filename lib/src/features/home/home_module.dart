@@ -5,9 +5,7 @@ import 'package:todo_list_clean_architecture/src/features/home/home_page.dart';
 
 class HomeModule extends Module {
   @override
-  List<Bind> get binds => [
-        Bind.lazySingleton((i) => HomeCubit(authService: i.get())),
-      ];
+  List<Bind> get binds => [Bind.lazySingleton((i) => HomeCubit())];
 
   @override
   List<Module> get imports => [AuthModule()];

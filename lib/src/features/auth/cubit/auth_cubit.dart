@@ -14,6 +14,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   final AuthService _authService;
 
+  User? get currentUser => _authService.currentUser;
+
   Future<void> signUp({
     required String email,
     required String password,
