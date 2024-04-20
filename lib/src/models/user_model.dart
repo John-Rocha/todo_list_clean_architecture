@@ -2,7 +2,6 @@ class UserModel {
   final String id;
   final String name;
   final String email;
-  final String password;
   final String photoUrl;
   final bool isActivated;
   DateTime createdAt;
@@ -11,7 +10,6 @@ class UserModel {
     required this.id,
     required this.name,
     required this.email,
-    required this.password,
     required this.photoUrl,
     this.isActivated = true,
     DateTime? createdAt,
@@ -30,7 +28,6 @@ class UserModel {
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
-      password: password ?? this.password,
       photoUrl: photoUrl ?? this.photoUrl,
       isActivated: isActivated ?? this.isActivated,
       createdAt: createdAt ?? this.createdAt,
@@ -42,7 +39,6 @@ class UserModel {
       id: map['id'],
       name: map['name'],
       email: map['email'],
-      password: map['password'],
       photoUrl: map['photoUrl'],
       isActivated: map['isActivated'],
       createdAt: DateTime.parse(map['createdAt']),
@@ -54,7 +50,6 @@ class UserModel {
       'id': id,
       'name': name,
       'email': email,
-      'password': password,
       'photoUrl': photoUrl,
       'isActivated': isActivated,
       'createdAt': createdAt.toIso8601String(),

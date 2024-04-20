@@ -8,7 +8,8 @@ import 'package:todo_list_clean_architecture/src/services/auth/auth_service_impl
 class AuthModule extends Module {
   @override
   List<Bind> get binds => [
-        Bind.lazySingleton<AuthService>((i) => AuthServiceImpl()),
+        Bind.lazySingleton<AuthService>(
+            (i) => AuthServiceImpl(userDatabase: i.get())),
         Bind.singleton((i) => AuthCubit(authService: i.get()), export: true),
       ];
 

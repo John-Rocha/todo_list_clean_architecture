@@ -2,10 +2,16 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todo_list_clean_architecture/src/core/exceptions/auth_exception.dart';
+import 'package:todo_list_clean_architecture/src/models/user_model.dart';
 import 'package:todo_list_clean_architecture/src/services/auth/auth_service.dart';
+import 'package:todo_list_clean_architecture/src/services/database/user_database.dart';
 
 class AuthServiceImpl implements AuthService {
   final _auth = FirebaseAuth.instance;
+  final UserDatabase _userDatabase;
+
+  AuthServiceImpl({required UserDatabase userDatabase})
+      : _userDatabase = userDatabase;
 
   @override
   Future<User?> signIn({
@@ -43,6 +49,18 @@ class AuthServiceImpl implements AuthService {
         await user.updateDisplayName(name);
         await user.reload();
         final latestUser = currentUser;
+
+        // Save user data in Firestore
+        if (latestUser != null) {
+          final user = UserModel(
+            id: latestUser.uid,
+            name: name,
+            email: email,
+            photoUrl: 'photoUrl',
+          );
+          await _userDatabase.createUser(user);
+        }
+
         return latestUser;
       }
     } on FirebaseAuthException catch (e, s) {

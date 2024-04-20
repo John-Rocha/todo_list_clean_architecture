@@ -28,40 +28,37 @@ class _HomePageState extends BaseState<HomePage, HomeCubit> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          TasksPage(),
-          ProfilePage(),
-        ],
-      ),
-      bottomNavigationBar: BlocBuilder<HomeCubit, HomeState>(
-        bloc: controller,
-        builder: (context, state) {
-          if (state is HomePageChangedState) {
-            return BottomNavigationBar(
-              currentIndex: state.index,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.task_outlined),
-                  label: 'Tasks',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outline),
-                  label: 'Perfil',
-                ),
-              ],
-              onTap: (index) {
-                _pageController.jumpToPage(index);
-                controller.pageTapped(index);
-              },
-            );
-          }
-          return const SizedBox.shrink();
-        },
-      ),
+    return BlocBuilder<HomeCubit, HomeState>(
+      bloc: controller,
+      builder: (context, state) {
+        return Scaffold(
+          body: PageView(
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: const [
+              TasksPage(),
+              ProfilePage(),
+            ],
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: (state as HomePageChangedState).index,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.task_outlined),
+                label: 'Tasks',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline),
+                label: 'Perfil',
+              ),
+            ],
+            onTap: (index) {
+              _pageController.jumpToPage(index);
+              controller.pageTapped(index);
+            },
+          ),
+        );
+      },
     );
   }
 }

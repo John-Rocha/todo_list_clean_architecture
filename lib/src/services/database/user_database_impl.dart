@@ -6,14 +6,8 @@ class UserDatabaseImpl implements UserDatabase {
   final _db = FirebaseFirestore.instance;
 
   @override
-  Future<void> createUser(String uid, String email, String name) async {
-    await _db.collection('users').doc(uid).set({
-      'email': email,
-      'name': name,
-      'photoUrl': '',
-      'isActivated': true,
-      'createdAt': FieldValue.serverTimestamp(),
-    });
+  Future<void> createUser(UserModel user) async {
+    await _db.collection('users').doc(user.id).set(user.toMap());
   }
 
   @override
