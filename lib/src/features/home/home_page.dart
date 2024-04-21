@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -16,13 +17,24 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends BaseState<HomePage, HomeCubit> {
   final authController = Modular.get<AuthCubit>();
-
-  // Page Controls
+  final _analytics = FirebaseAnalytics.instance;
   final PageController _pageController = PageController();
+
+  List<Widget> pages = const [
+    TasksPage(),
+    ProfilePage(),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _analytics.setAnalyticsCollectionEnabled(true);
+  }
 
   @override
   void dispose() {
     super.dispose();
+
     _pageController.dispose();
   }
 
@@ -34,11 +46,8 @@ class _HomePageState extends BaseState<HomePage, HomeCubit> {
         return Scaffold(
           body: PageView(
             controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: const [
-              TasksPage(),
-              ProfilePage(),
-            ],
+            onPageChanged: controller.pageTapped,
+            children: pages,
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: (state as HomePageChangedState).index,
@@ -52,9 +61,16 @@ class _HomePageState extends BaseState<HomePage, HomeCubit> {
                 label: 'Perfil',
               ),
             ],
-            onTap: (index) {
+            onTap: (index) async {
               _pageController.jumpToPage(index);
               controller.pageTapped(index);
+              await _analytics.logEvent(
+                name: 'page_tapped',
+                parameters: {
+                  'page_index': index,
+                  'page_name': pages[index].runtimeType.toString(),
+                },
+              );
             },
           ),
         );
