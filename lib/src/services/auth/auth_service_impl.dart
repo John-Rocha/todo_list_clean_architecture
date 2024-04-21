@@ -4,13 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todo_list_clean_architecture/src/core/exceptions/auth_exception.dart';
 import 'package:todo_list_clean_architecture/src/models/user_model.dart';
 import 'package:todo_list_clean_architecture/src/services/auth/auth_service.dart';
-import 'package:todo_list_clean_architecture/src/services/database/user_database.dart';
+import 'package:todo_list_clean_architecture/src/services/database/user_database_service.dart';
 
 class AuthServiceImpl implements AuthService {
   final _auth = FirebaseAuth.instance;
-  final UserDatabase _userDatabase;
+  final UserDatabaseService _userDatabase;
 
-  AuthServiceImpl({required UserDatabase userDatabase})
+  AuthServiceImpl({required UserDatabaseService userDatabase})
       : _userDatabase = userDatabase;
 
   @override

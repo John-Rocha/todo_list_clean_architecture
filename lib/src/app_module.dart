@@ -4,13 +4,14 @@ import 'package:todo_list_clean_architecture/src/features/home/home_module.dart'
 import 'package:todo_list_clean_architecture/src/features/splash/splash_page.dart';
 import 'package:todo_list_clean_architecture/src/services/auth/auth_service.dart';
 import 'package:todo_list_clean_architecture/src/services/auth/auth_service_impl.dart';
-import 'package:todo_list_clean_architecture/src/services/database/user_database.dart';
-import 'package:todo_list_clean_architecture/src/services/database/user_database_impl.dart';
+import 'package:todo_list_clean_architecture/src/services/database/user_database_service.dart';
+import 'package:todo_list_clean_architecture/src/services/database/user_database_service_impl.dart';
 
 class AppModule extends Module {
   @override
   List<Bind> get binds => [
-        Bind.lazySingleton<UserDatabase>((i) => UserDatabaseImpl()),
+        Bind.lazySingleton<UserDatabaseService>(
+            (i) => UserDatabaseServiceImpl()),
         Bind.lazySingleton<AuthService>(
             (i) => AuthServiceImpl(userDatabase: i.get())),
       ];

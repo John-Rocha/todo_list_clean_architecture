@@ -1,8 +1,8 @@
 import 'package:todo_list_clean_architecture/src/models/user_model.dart';
-import 'package:todo_list_clean_architecture/src/services/database/user_database.dart';
+import 'package:todo_list_clean_architecture/src/services/database/user_database_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserDatabaseImpl implements UserDatabase {
+class UserDatabaseServiceImpl implements UserDatabaseService {
   final _db = FirebaseFirestore.instance;
 
   @override
