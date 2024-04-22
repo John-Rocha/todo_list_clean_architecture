@@ -39,6 +39,35 @@ class _SignUpPageState extends BaseState<SignUpPage, AuthCubit> {
     }
   }
 
+  Future<void> _showPhotoSourceSelector(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera),
+              title: const Text('Câmera'),
+              onTap: () {
+                _pickImage(ImageSource.camera);
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.image),
+              title: const Text('Galeria'),
+              onTap: () {
+                _pickImage(ImageSource.gallery);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -50,18 +79,18 @@ class _SignUpPageState extends BaseState<SignUpPage, AuthCubit> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthCubit, AuthState>(
-      bloc: controller,
-      listener: (context, state) {
-        if (state is AuthErrorState) {
-          showError(state.message);
-        }
-      },
-      builder: (context, state) {
-        return Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Form(
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: BlocConsumer<AuthCubit, AuthState>(
+          bloc: controller,
+          listener: (context, state) {
+            if (state is AuthErrorState) {
+              showError(state.message);
+            }
+          },
+          builder: (context, state) {
+            return Form(
               key: _formKey,
               child: Center(
                 child: SingleChildScrollView(
@@ -98,7 +127,7 @@ class _SignUpPageState extends BaseState<SignUpPage, AuthCubit> {
                                   color: Colors.white,
                                 ),
                                 onPressed: () {
-                                  _pickImage(ImageSource.camera);
+                                  _showPhotoSourceSelector(context);
                                 },
                               ),
                             ),
@@ -221,10 +250,10 @@ class _SignUpPageState extends BaseState<SignUpPage, AuthCubit> {
                   ),
                 ),
               ),
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ),
     );
   }
 }
