@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:todo_list_clean_architecture/src/core/exceptions/auth_exception.dart';
 import 'package:todo_list_clean_architecture/src/models/user_model.dart';
 import 'package:todo_list_clean_architecture/src/services/auth/auth_service.dart';
@@ -38,30 +40,37 @@ class AuthServiceImpl implements AuthService {
     required String email,
     required String password,
     required String name,
+    File? image,
   }) async {
     try {
-      final user = (await _auth.createUserWithEmailAndPassword(
+      final userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
-      ))
-          .user;
+      );
+      final user = userCredential.user;
+
       if (user != null) {
+        await signIn(email: email, password: password);
+
+        //handle image upload
+        final imageName = '${user.uid}.jpg';
+        final imageUrl = await _uploadImage(image, imageName);
+
+        // Update user profile
         await user.updateDisplayName(name);
+        await user.updatePhotoURL(imageUrl);
         await user.reload();
-        final latestUser = currentUser;
 
         // Save user data in Firestore
-        if (latestUser != null) {
-          final user = UserModel(
-            id: latestUser.uid,
-            name: name,
-            email: email,
-            photoUrl: 'photoUrl',
-          );
-          await _userDatabase.createUser(user);
-        }
+        final userModel = UserModel(
+          id: user.uid,
+          name: name,
+          email: email,
+          imageUrl: imageUrl,
+        );
+        await _userDatabase.createUser(userModel);
 
-        return latestUser;
+        return user;
       }
     } on FirebaseAuthException catch (e, s) {
       log('Erro ao criar usuário', error: e, stackTrace: s);
@@ -77,4 +86,15 @@ class AuthServiceImpl implements AuthService {
 
   @override
   User? get currentUser => _auth.currentUser;
+
+  Future<String?> _uploadImage(File? image, String imageName) async {
+    if (image == null) {
+      return null;
+    }
+
+    final storage = FirebaseStorage.instance;
+    final ref = storage.ref().child('images').child(imageName);
+    await ref.putFile(image);
+    return ref.getDownloadURL();
+  }
 }

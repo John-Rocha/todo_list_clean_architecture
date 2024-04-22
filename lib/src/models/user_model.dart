@@ -2,7 +2,7 @@ class UserModel {
   final String id;
   final String name;
   final String email;
-  final String photoUrl;
+  final String? imageUrl;
   final bool isActivated;
   DateTime createdAt;
 
@@ -10,7 +10,7 @@ class UserModel {
     required this.id,
     required this.name,
     required this.email,
-    required this.photoUrl,
+    this.imageUrl,
     this.isActivated = true,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
@@ -20,7 +20,7 @@ class UserModel {
     String? name,
     String? email,
     String? password,
-    String? photoUrl,
+    String? imageUrl,
     bool? isActivated,
     DateTime? createdAt,
   }) {
@@ -28,7 +28,7 @@ class UserModel {
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
-      photoUrl: photoUrl ?? this.photoUrl,
+      imageUrl: imageUrl ?? this.imageUrl,
       isActivated: isActivated ?? this.isActivated,
       createdAt: createdAt ?? this.createdAt,
     );
@@ -39,7 +39,7 @@ class UserModel {
       id: map['id'],
       name: map['name'],
       email: map['email'],
-      photoUrl: map['photoUrl'],
+      imageUrl: map['photoUrl'],
       isActivated: map['isActivated'],
       createdAt: DateTime.parse(map['createdAt']),
     );
@@ -50,7 +50,7 @@ class UserModel {
       'id': id,
       'name': name,
       'email': email,
-      'photoUrl': photoUrl,
+      'photoUrl': imageUrl,
       'isActivated': isActivated,
       'createdAt': createdAt.toIso8601String(),
     };

@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:todo_list_clean_architecture/src/core/ui/base_state/base_state.dart';
 import 'package:todo_list_clean_architecture/src/features/auth/cubit/auth_cubit.dart';
 import 'package:todo_list_clean_architecture/src/shared/widgets/custom_button.dart';
@@ -18,9 +21,23 @@ class _SignUpPageState extends BaseState<SignUpPage, AuthCubit> {
   final _nameController = TextEditingController(text: 'Teste');
   final _emailController = TextEditingController(text: 'john@email.com');
   final _passwordController = TextEditingController(text: '123456');
+  File? _image;
 
   bool _isObscurePassword = true;
   bool _isObscureConfirmPassword = true;
+
+  void _pickImage(ImageSource imageSource) async {
+    final image = await ImagePicker().pickImage(
+      source: imageSource,
+      imageQuality: 50,
+      preferredCameraDevice: CameraDevice.front,
+    );
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -57,6 +74,36 @@ class _SignUpPageState extends BaseState<SignUpPage, AuthCubit> {
                           fontSize: MediaQuery.of(context).size.width * 0.08,
                           fontWeight: FontWeight.bold,
                         ),
+                      ),
+                      Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            child: _image != null
+                                ? CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage: FileImage(_image!),
+                                  )
+                                : const Icon(Icons.person, size: 70),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: CircleAvatar(
+                              backgroundColor: Theme.of(context).primaryColor,
+                              radius: 20,
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  _pickImage(ImageSource.camera);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 16),
                       CustomTextFormField(
@@ -152,6 +199,7 @@ class _SignUpPageState extends BaseState<SignUpPage, AuthCubit> {
                                     email: _emailController.text,
                                     password: _passwordController.text,
                                     name: _nameController.text,
+                                    image: _image,
                                   );
                                 }
                               },

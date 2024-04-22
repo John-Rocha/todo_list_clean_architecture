@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String email,
     required String password,
     required String name,
+    File? image,
   }) async {
     emit(AuthLoadingState());
     try {
@@ -27,6 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         password: password,
         name: name,
+        image: image,
       );
       emit(AuthLoadedState(user: user));
     } on AuthException catch (e, s) {

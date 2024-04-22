@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthService {
@@ -9,6 +11,7 @@ abstract class AuthService {
     required String email,
     required String password,
     required String name,
+    File? image,
   });
   Future<void> signOut();
 

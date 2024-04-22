@@ -9,7 +9,7 @@ final class AuthLoadingState extends AuthState {}
 final class AuthLoadedState extends AuthState {
   final User? user;
 
-  AuthLoadedState({required this.user});
+  AuthLoadedState({this.user});
 }
 
 final class AuthErrorState extends AuthState {
